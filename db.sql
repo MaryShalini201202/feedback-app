@@ -1,7 +1,7 @@
-CREATE TABLE feedback (
+CREATE TABLE IF NOT EXISTS feedback (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
-  message TEXT NOT NULL,
-  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL
 );
