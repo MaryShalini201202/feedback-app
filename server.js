@@ -1,32 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
-require('dotenv').config(); // Loads the .env file
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Connect to PostgreSQL using the DATABASE_URL from .env
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // Needed if you're using Render or other cloud services
+  ssl: { rejectUnauthorized: false }
 });
 
-app.use(bodyParser.json());
-app.use(express.static(__dirname)); // Serves index.html from this folder
+app.use(bodyParser.urlencoded({ extended: true })); // ✅ Use for form data
+app.use(express.static(__dirname));
 
-// Route to handle feedback form submission
+// ✅ Updated to include `subject`
 app.post('/submit-feedback', async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, subject, message } = req.body;
 
   try {
     await pool.query(
-      'INSERT INTO feedback(name, email, message) VALUES ($1, $2, $3)',
-      [name, email, message]
+      'INSERT INTO feedback(name, email, subject, message) VALUES ($1, $2, $3, $4)',
+      [name, email, subject, message]
     );
     res.json({ message: 'Feedback submitted successfully.' });
   } catch (err) {
-    console.error(err);
+    console.error("Database insert error:", err);
     res.status(500).json({ message: 'Error saving feedback.' });
   }
 });
