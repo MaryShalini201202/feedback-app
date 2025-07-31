@@ -6,50 +6,64 @@
   <title>Feedback Form</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      background: #f4f4f4;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: linear-gradient(to right, #89f7fe, #66a6ff);
+      min-height: 100vh;
     }
 
     h1 {
-      color: #333;
+      color: #ffffff;
       text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
 
     form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
+      background: #e0f7fa;
+      padding: 25px 30px;
+      border-radius: 15px;
       max-width: 500px;
       margin: 0 auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
     label {
       display: block;
       margin: 10px 0 5px;
+      color: #006064;
+      font-weight: bold;
     }
 
     input, textarea {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1px solid #b2ebf2;
+      border-radius: 8px;
+      background: #ffffff;
     }
 
     button[type="submit"] {
-      background: #38f9d7;
+      background: #00bcd4;
+      color: white;
       padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #008ba3;
     }
 
     #messageBox {
       text-align: center;
       margin-top: 15px;
+      font-weight: bold;
     }
 
     #viewBtn {
@@ -57,16 +71,17 @@
       bottom: 20px;
       right: 20px;
       padding: 10px 20px;
-      background: #007bff;
+      background: #ff4081;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     #viewBtn:hover {
-      background-color: #0056b3;
+      background-color: #e91e63;
     }
 
     table {
@@ -74,16 +89,27 @@
       border-collapse: collapse;
       margin-top: 30px;
       background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     th, td {
       border: 1px solid #ddd;
-      padding: 10px;
+      padding: 12px;
       text-align: left;
     }
 
     th {
-      background-color: #38f9d7;
+      background-color: #00bcd4;
+      color: white;
+    }
+
+    #feedbackTableContainer {
+      margin-top: 40px;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
@@ -172,7 +198,7 @@ document.getElementById("viewBtn").addEventListener("click", async () => {
     const data = await response.json();
 
     let html = `
-      <h2>Submitted Feedback</h2>
+      <h2 style="text-align:center; color:#006064;">Submitted Feedback</h2>
       <table>
         <thead>
           <tr>
