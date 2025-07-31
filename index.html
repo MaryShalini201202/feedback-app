@@ -3,115 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Feedback</title>
+  <title>Feedback Form</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
     body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #43e97b, #38f9d7);
       margin: 0;
-      height: 100vh;
-      background: linear-gradient(to right, #4facfe, #8e44ad);
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
     .container {
-      background-color: #f8f8f8;
-      border-radius: 12px;
+      background: white;
       padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     }
 
-    h1 {
+    h2 {
       text-align: center;
-      margin-bottom: 20px;
-      color: #000;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #333;
     }
 
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      border: none;
-      border-bottom: 2px solid #ccc;
-      background: transparent;
-      font-size: 16px;
-      outline: none;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
-    input:focus, textarea:focus {
-      border-bottom-color: #4facfe;
+    textarea {
+      resize: vertical;
+      min-height: 100px;
     }
 
     button {
+      margin-top: 20px;
       width: 100%;
       padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
       border: none;
-      border-radius: 4px;
-      background: linear-gradient(to right, #4facfe, #8e44ad);
-      color: #fff;
+      background: #43e97b;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.3s;
     }
 
     button:hover {
-      opacity: 0.9;
+      background: #3ad67b;
     }
 
-    #successMsg {
+    .success {
       display: none;
-      color: green;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 15px;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 6px;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Feedback</h1>
+    <h2>Feedback Form</h2>
     <form id="feedbackForm">
-      <input type="text" name="name" placeholder="Name" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="text" name="subject" placeholder="Subject" required />
-      <textarea name="message" placeholder="Message" rows="4" required></textarea>
-      <button type="submit">Submit</button>
-      <p id="successMsg">✅ Feedback submitted successfully!</p>
+      <label for="name">Name:</label>
+      <input type="text" name="name" required />
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" required />
+
+      <label for="subject">Subject:</label>
+      <input type="text" name="subject" required />
+
+      <label for="message">Message:</label>
+      <textarea name="message" required></textarea>
+
+      <button type="submit">Submit Feedback</button>
+
+      <div id="successMsg" class="success">
+        ✅ Feedback submitted successfully!
+      </div>
     </form>
   </div>
 
   <script>
-    const form = document.getElementById('feedbackForm');
-    const successMsg = document.getElementById('successMsg');
+    const form = document.getElementById("feedbackForm");
+    const successMsg = document.getElementById("successMsg");
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      // ✅ Basic client-side validation
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const subject = form.subject.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || !email || !subject || !message) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      if (message.length < 10) {
+        alert("Message must be at least 10 characters long.");
+        return;
+      }
 
       const formData = new FormData(form);
       const data = new URLSearchParams(formData);
 
       try {
-        const response = await fetch('/submit-feedback', {
-          method: 'POST',
+        const response = await fetch("/submit-feedback", {
+          method: "POST",
           body: data,
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-          successMsg.style.display = 'block';
+          successMsg.style.display = "block";
           form.reset();
         } else {
-          alert('❌ Something went wrong. Please try again.');
+          alert("❌ " + result.message);
         }
       } catch (error) {
-        alert('❌ Network error. Please try again later.');
+        alert("❌ Network error. Please try again later.");
       }
     });
   </script>
